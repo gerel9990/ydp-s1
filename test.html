@@ -62,11 +62,11 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>1.	Би бол үдэшлэгийн гол хүн.</td>
+                    <td>1. Би бол үдэшлэгийн гол хүн.</td>
                     <td><input type="number" name="q1" min="1" max="5" required></td>
                 </tr>
                 <tr>
-                    <td>2.  Би бусдын төлөө санаа зовох нь бага.</td>
+                    <td>2. Би бусдын төлөө санаа зовох нь бага.</td>
                     <td><input type="number" name="q2" min="1" max="5" required></td>
                 </tr>
                 <tr>
@@ -118,7 +118,7 @@
                     <td><input type="number" name="q14" min="1" max="5" required></td>
                 </tr>
                 <tr>
-                    <td>15. Би тод уран төсөөлөлтэй.</td>
+                    <td>15. Би уран сэтгэмж сайтай.</td>
                     <td><input type="number" name="q15" min="1" max="5" required></td>
                 </tr>
                 <tr>
@@ -158,7 +158,7 @@
                     <td><input type="number" name="q24" min="1" max="5" required></td>
                 </tr>
                 <tr>
-                    <td>25. Би гайхалтай шинэ санаатай.</td>
+                    <td>25. Би гайхалтай шинэ зүйлсийг санаачилдаг.</td>
                     <td><input type="number" name="q25" min="1" max="5" required></td>
                 </tr>
                 <tr>
@@ -214,7 +214,7 @@
                     <td><input type="number" name="q38" min="1" max="5" required></td>
                 </tr>
                 <tr>
-                    <td>39. Би байнга сэтгэл санааны өөрчлөлттэй байдаг.</td>
+                    <td>39. Би байнга сэтгэл санааны тогтворгүй байдалд байдаг. </td>
                     <td><input type="number" name="q39" min="1" max="5" required></td>
                 </tr>
                 <tr>
@@ -268,14 +268,17 @@
     </form>
 
     <script>
-          const inputs = Array.from(document.querySelectorAll('input[type="number"]')); // Convert NodeList to Array
+  document.addEventListener('DOMContentLoaded', () => {
+    const inputs = Array.from(document.querySelectorAll('input[type="number"]'));
     inputs.forEach((input, index) => {
-        input.addEventListener('change', () => {
-            if (index < inputs.length - 1) {
-                inputs[index + 1].focus(); // Move focus to the next input
+        input.addEventListener('input', () => {
+            if (index < inputs.length - 1 && input.value !== '') {
+                inputs[index + 1].focus();
             }
         });
     });
+});
+
         document.getElementById("testForm").addEventListener("submit", function (event) {
             event.preventDefault();
             const formData = new FormData(event.target);
@@ -284,39 +287,39 @@
             formData.forEach((value, key) => {
                 scores[key] = parseInt(value);
             });
-
+            const O = 8 + scores.q5 - scores.q10 + scores.q15 - scores.q20 + scores.q25 - scores.q30 + scores.q35 + scores.q40 + scores.q45 + scores.q50;
+            const C = 14 + scores.q3 - scores.q8 + scores.q13 - scores.q18 + scores.q23 - scores.q28 + scores.q33 - scores.q38 + scores.q43 + scores.q48;
             const E = 20 + scores.q1 - scores.q6 + scores.q11 - scores.q16 + scores.q21 - scores.q26 + scores.q31 - scores.q36 + scores.q41 - scores.q46;
             const A = 14 - scores.q2 + scores.q7 - scores.q12 + scores.q17 - scores.q22 + scores.q27 - scores.q32 + scores.q37 + scores.q42 + scores.q47;
-            const C = 14 + scores.q3 - scores.q8 + scores.q13 - scores.q18 + scores.q23 - scores.q28 + scores.q33 - scores.q38 + scores.q43 + scores.q48;
             const N = 38 - scores.q4 + scores.q9 - scores.q14 + scores.q19 - scores.q24 - scores.q29 - scores.q34 - scores.q39 - scores.q44 - scores.q49;
-            const O = 8 + scores.q5 - scores.q10 + scores.q15 - scores.q20 + scores.q25 - scores.q30 + scores.q35 + scores.q40 + scores.q45 + scores.q50;
+        
 
             const descriptions = {
+                O: `• Openness to Experience (O) – <b>Нээлттэй хэв шинж</b> 
+                Шинэ туршлага, оюуны эрэл хайгуул хийдэг төрлийн зан чанар юм. Өндөр оноо авсан хүмүүс нь илүү мөрөөдөмтгийг илэрхийлнэ. Бага оноо авсан хүмүүс илүү бодитоор сэтгэх хандлагатай байдаг.`,
+                C: `• Conscientiousness (C) – <b>Хариуцлагатай зарчимч хэв шинж</b>
+                Шударга, ажилсаг хүний ​​зан чанар юм. Өндөр оноо авсан хүмүүс дүрэм журмыг дагаж мөрдөж, зохион байгуулалтыг илүүд үздэг. Бага оноо авсан хүмүүс заримдаа замбараагүй байж, бусдад худал хэлж болзошгүй.`,
                 E: `• Extroversion (E) - <b>Гадагшаа чиглэсэн, идэвхтэй хэв шинж</b>
                 Өөрөөсөө гадна буюу хамт олны дунд байхаас сэтгэл ханамжийг эрэлхийлдэг төрлийн зан чанар юм. Өндөр оноо авсан хүмүүс нийтэч байх хандлагатай байдаг бол бага оноо авсан хүмүүс ганцаараа ажиллахыг илүүд үздэг.`,
                 A: `• Agreeableness (A) – <b>Хүлцэнгүй хэв шинж</b>
                 Өөрсдийн зан төлөвийг бусдад нийцүүлэн өөрчлөхийг илэрхийлнэ. Өндөр оноо авсан хүмүүс ихэвчлэн эелдэг хүмүүс байдаг. Бага оноо авсан хүмүүс аливааг "байгаагаар нь хэлэх" хандлагатай байдаг.`,
-                C: `• Conscientiousness (C) – <b>Хариуцлагатай зарчимч хэв шинж</b>
-                Шударга, ажилсаг хүний ​​зан чанар юм. Өндөр оноо авсан хүмүүс дүрэм журмыг дагаж мөрдөж, зохион байгуулалтыг илүүд үздэг. Бага оноо авсан хүмүүс заримдаа замбараагүй байж, бусдад худал хэлж болзошгүй.`,
                 N: `• Neuroticism (N) – <b>Тогтворгүй хэв шинж</b>
                 Сэтгэл хөдлөлийн шинж чанартай холбоотой байдлыг илэрхийлнэ.`,
-                O: `• Openness to Experience (O) – <b>Нээлттэй хэв шинж</b> 
-                Шинэ туршлага, оюуны эрэл хайгуул хийдэг төрлийн зан чанар юм. Өндөр оноо авсан хүмүүс нь илүү мөрөөдөмтгийг илэрхийлнэ. Бага оноо авсан хүмүүс илүү бодитоор сэтгэх хандлагатай байдаг.`
-            };
+                 };
 
             const resultWindow = window.open("", "_blank");
         resultWindow.document.write(`
             <h1>Test Results</h1>
+             <p><strong>Openness to Experience (O):</strong> ${O}</p>
+            <p>${descriptions.O}</p>
+            <p><strong>Conscientiousness (C):</strong> ${C}</p>
+            <p>${descriptions.C}</p>
             <p><strong>Extroversion (E):</strong> ${E}</p>
             <p>${descriptions.E}</p>
             <p><strong>Agreeableness (A):</strong> ${A}</p>
             <p>${descriptions.A}</p>
-            <p><strong>Conscientiousness (C):</strong> ${C}</p>
-            <p>${descriptions.C}</p>
             <p><strong>Neuroticism (N):</strong> ${N}</p>
             <p>${descriptions.N}</p>
-            <p><strong>Openness to Experience (O):</strong> ${O}</p>
-            <p>${descriptions.O}</p>
         `);
         });
     </script>

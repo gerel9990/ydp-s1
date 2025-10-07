@@ -1,327 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Big Five Personality Test</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Big Five Personality Test</title>
+<style>
+    body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #fff8f4;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #ce2b7f;
+        margin-bottom: 10px;
+    }
+
+    p.description {
+        text-align: center;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    form {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .question {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #fff;
+        border: 1px solid #ffb3c6;
+        border-radius: 10px;
+        padding: 10px 15px;
+        margin-bottom: 8px;
+        box-shadow: 0 2px 5px rgba(255, 105, 180, 0.1);
+        transition: transform 0.2s ease;
+    }
+
+    .question:hover {
+        transform: scale(1.01);
+        background-color: #fff3f7;
+    }
+
+    .question p {
+        margin: 0;
+        flex: 1;
+        font-size: 15px;
+        color: #444;
+    }
+
+    .answers {
+        margin-left: 15px;
+        flex-shrink: 0;
+    }
+
+    input[type="number"] {
+        width: 60px;
+        padding: 5px;
+        font-size: 15px;
+        text-align: center;
+        border: 1px solid #ffb3c6;
+        border-radius: 8px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    input[type="number"]:focus {
+        border-color: #e74c8b;
+        box-shadow: 0 0 5px rgba(231, 76, 139, 0.5);
+    }
+
+    button {
+        display: block;
+        margin: 25px auto;
+        padding: 12px 25px;
+        background-color: #e74c8b;
+        color: white;
+        border: none;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background-color: #d63384;
+    }
+
+    #result {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        border: 2px dashed #ffd1aa;
+        border-radius: 10px;
+        background-color: #fffaf3;
+        display: none;
+        animation: fadeIn 0.4s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    #result h2 {
+        text-align: center;
+        color: #ce2b7f;
+        margin-bottom: 15px;
+    }
+
+    #result p {
+        margin-bottom: 10px;
+        color: #444;
+        line-height: 1.6;
+    }
+
+    @media screen and (max-width: 600px) {
+        .question {
+            flex-direction: column;
+            align-items: flex-start;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            overflow-x: auto;
+        .answers {
+            margin-left: 0;
+            margin-top: 5px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-        td input[type="number"] {
-            width: 100%;
-            padding: 8px;
-            font-size: 16px;
-        }
-        @media screen and (max-width: 600px) {
-            table {
-                display: block;
-                overflow-x: auto;
-                white-space: nowrap;
-            }
-            th, td {
-                font-size: 14px;
-                padding: 6px;
-            }
-            td input[type="number"] {
-                font-size: 14px;
-                padding: 6px;
-            }
-        }
-        .result {
-            margin-top: 20px;
-        }
-    </style>
+    }
+</style>
 </head>
+
 <body>
-    <h1>Big Five Personality Test</h1>
-    <p>Доорх хүснэгтэд 1-50 хүртэлх асуулт тус бүрд хэр зэрэг санал нийлж байгааг 1-5 хүртэлх оноогоор үнэлнэ. 
-        1= санал нийлэхгүй, 2= бага зэрэг санал нийлэхгүй, 3= төвийг сахисан, 4= бага зэрэг санал нийлж байна, 5= санал нийлж байна гэсэн оноонуудаас сонгон зүүн талын хоосон нүдэнд тэмдэглэнэ үү. 
-        </p>
-    <form id="testForm">
-        <table>
-            <thead>
-                <tr>
-                    <th>Асуулт</th>
-                    <th>Оноо (1-5)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1. Би бол үдэшлэгийн гол хүн.</td>
-                    <td><input type="number" name="q1" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>2. Би бусдын төлөө санаа зовох нь бага.</td>
-                    <td><input type="number" name="q2" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>3. Би үргэлж бэлтгэлтэй байдаг.</td>
-                    <td><input type="number" name="q3" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>4. Би стресст амархан өртдөг.</td>
-                    <td><input type="number" name="q4" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>5. Би үгийн баялаг сайтай.</td>
-                    <td><input type="number" name="q5" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>6. Би тийм ч их ярьдаггүй.</td>
-                    <td><input type="number" name="q6" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>7. Би хүмүүсийн талаар сонирхдог.</td>
-                    <td><input type="number" name="q7" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>8. Би өөрийнхөө эд зүйлсэд харам.</td>
-                    <td><input type="number" name="q8" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>9. Би ихэнхдээ амар тайван байдаг.</td>
-                    <td><input type="number" name="q9" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>10. Би хийсвэр ухагдахууныг ойлгохдоо тааруу.</td>
-                    <td><input type="number" name="q10" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>11. Би хүмүүсийн дунд чөлөөтэй байж чаддаг.</td>
-                    <td><input type="number" name="q11" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>12. Би хүмүүсийг доромжилдог.</td>
-                    <td><input type="number" name="q12" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>13. Би нарийн зүйлсэд анхаарал хандуулдаг.</td>
-                    <td><input type="number" name="q13" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>14. Би аливаа зүйлсэд санаа зовдог.</td>
-                    <td><input type="number" name="q14" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>15. Би уран сэтгэмж сайтай.</td>
-                    <td><input type="number" name="q15" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>16. Би анхаарлын төвд байдаггүй.</td>
-                    <td><input type="number" name="q16" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>17. Би бусдын мэдрэмжийг мэдэрч чаддаг.</td>
-                    <td><input type="number" name="q17" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>18. Би аливаа зүйлийг замбараагүй болгодог.</td>
-                    <td><input type="number" name="q18" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>19. Би сэтгэлээр унах нь ховорхон.</td>
-                    <td><input type="number" name="q19" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>20. Би хийсвэр санааг сонирхдоггүй.</td>
-                    <td><input type="number" name="q20" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>21. Би харилцан яриаг эхлүүлдэг.</td>
-                    <td><input type="number" name="q21" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>22. Би бусдын асуудлыг сонирхдоггүй.</td>
-                    <td><input type="number" name="q22" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>23. Би аливаа ажлыг цаг алдалгүй дуусгаж чаддаг.</td>
-                    <td><input type="number" name="q23" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>24. Би амархан сатаардаг.</td>
-                    <td><input type="number" name="q24" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>25. Би гайхалтай шинэ зүйлсийг санаачилдаг.</td>
-                    <td><input type="number" name="q25" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>26. Би хэлэх зүйл багатай байдаг.</td>
-                    <td><input type="number" name="q26" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>27. Би зөөлөн сэтгэлтэй.</td>
-                    <td><input type="number" name="q27" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>28. Би аливаа зүйлийг зохих байранд нь буцааж тавихаа мартдаг.</td>
-                    <td><input type="number" name="q28" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>29. Би амархан бухимддаг.</td>
-                    <td><input type="number" name="q29" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>30. Би тийм ч сайн уран төсөөлөлтэй биш.</td>
-                    <td><input type="number" name="q30" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>31. Би үдэшлэгт маш олон хүмүүстэй ярилцдаг.</td>
-                    <td><input type="number" name="q31" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>32. Би бусдын талаар үнэхээр сонирхдоггүй.</td>
-                    <td><input type="number" name="q32" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>33. Би хэв журамд дуртай.</td>
-                    <td><input type="number" name="q33" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>34. Би ааш зангаа өөрчлөх нь олон.</td>
-                    <td><input type="number" name="q34" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>35. Би аливааг хурдан ойлгодог.</td>
-                    <td><input type="number" name="q35" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>36. Би өөртөө бусдын анхаарлыг татах дүргүй.</td>
-                    <td><input type="number" name="q36" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>37. Би бусдад цаг гаргадаг.</td>
-                    <td><input type="number" name="q37" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>38. Би үүрэг хариуцлагаас зайлсхийдэг.</td>
-                    <td><input type="number" name="q38" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>39. Би байнга сэтгэл санааны тогтворгүй байдалд байдаг. </td>
-                    <td><input type="number" name="q39" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>40. Би хүнд үгнүүд ашигладаг.</td>
-                    <td><input type="number" name="q40" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>41. Би олны анхаарлын төвд байхаас санаа зовдоггүй.</td>
-                    <td><input type="number" name="q41" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>42. Би бусдын сэтгэл хөдлөлийг мэдэрдэг.</td>
-                    <td><input type="number" name="q42" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>43. Би аливаа хуваарийг дагаж мөрддөг.</td>
-                    <td><input type="number" name="q43" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>44. Би амархан уурладаг.</td>
-                    <td><input type="number" name="q44" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>45. Би аливаа зүйлийг тунгаан бодоход цаг зарцуулдаг.</td>
-                    <td><input type="number" name="q45" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>46. Би танихгүй хүмүүсийн дэргэд чимээгүй байдаг.</td>
-                    <td><input type="number" name="q46" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>47. Би хүмүүсийг тайвшруулдаг.</td>
-                    <td><input type="number" name="q47" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>48. Би ажилдаа шаардлага тавьдаг.</td>
-                    <td><input type="number" name="q48" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>49. Би ихэнх тохиолдолд сэтгэлээр унадаг.</td>
-                    <td><input type="number" name="q49" min="1" max="5" required></td>
-                </tr>
-                <tr>
-                    <td>50. Би шинэ санаагаар дүүрэн.</td>
-                    <td><input type="number" name="q50" min="1" max="5" required></td>
-                </tr>
+<h1>Big Five Personality Test</h1>
+<p class="description">Доорх 50 асуултад 1–5 оноогоор хариулна уу.<br>
+1 = санал нийлэхгүй &nbsp;&nbsp;|&nbsp;&nbsp; 3 = төвийг сахисан &nbsp;&nbsp;|&nbsp;&nbsp; 5 = санал бүрэн нийлнэ</p>
 
-            </tbody>
-        </table>
-        <button type="submit">Үр дүн</button>
-    </form>
+<form id="testForm">
+    <div id="questions"></div>
+    <button type="submit">Үр дүн харах</button>
+</form>
 
-    <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const inputs = Array.from(document.querySelectorAll('input[type="number"]'));
-    inputs.forEach((input, index) => {
-        input.addEventListener('input', () => {
-            if (index < inputs.length - 1 && input.value !== '') {
-                inputs[index + 1].focus();
-            }
-        });
-    });
+<div id="result"></div>
+
+<script>
+const questions = [
+"Би бол үдэшлэгийн гол хүн.", "Би бусдын төлөө санаа зовох нь бага.",
+"Би үргэлж бэлтгэлтэй байдаг.", "Би стресст амархан өртдөг.",
+"Би үгийн баялаг сайтай.", "Би тийм ч их ярьдаггүй.",
+"Би хүмүүсийн талаар сонирхдог.", "Би өөрийнхөө эд зүйлсэд харам.",
+"Би ихэнхдээ амар тайван байдаг.", "Би хийсвэр ухагдахууныг ойлгохдоо тааруу.",
+"Би хүмүүсийн дунд чөлөөтэй байж чаддаг.", "Би хүмүүсийг доромжилдог.",
+"Би нарийн зүйлсэд анхаарал хандуулдаг.", "Би аливаа зүйлсэд санаа зовдог.",
+"Би уран сэтгэмж сайтай.", "Би анхаарлын төвд байдаггүй.",
+"Би бусдын мэдрэмжийг мэдэрч чаддаг.", "Би аливаа зүйлийг замбараагүй болгодог.",
+"Би сэтгэлээр унах нь ховорхон.", "Би хийсвэр санааг сонирхдоггүй.",
+"Би харилцан яриаг эхлүүлдэг.", "Би бусдын асуудлыг сонирхдоггүй.",
+"Би аливаа ажлыг цаг алдалгүй дуусгаж чаддаг.", "Би амархан сатаардаг.",
+"Би гайхалтай шинэ зүйлсийг санаачилдаг.", "Би хэлэх зүйл багатай байдаг.",
+"Би зөөлөн сэтгэлтэй.", "Би аливаа зүйлийг зохих байранд нь буцааж тавихаа мартдаг.",
+"Би амархан бухимддаг.", "Би тийм ч сайн уран төсөөлөлтэй биш.",
+"Би үдэшлэгт маш олон хүмүүстэй ярилцдаг.", "Би бусдын талаар үнэхээр сонирхдоггүй.",
+"Би хэв журамд дуртай.", "Би ааш зангаа өөрчлөх нь олон.",
+"Би аливааг хурдан ойлгодог.", "Би өөртөө бусдын анхаарлыг татах дүргүй.",
+"Би бусдад цаг гаргадаг.", "Би үүрэг хариуцлагаас зайлсхийдэг.",
+"Би байнга сэтгэл санааны тогтворгүй байдалд байдаг.", "Би хүнд үгнүүд ашигладаг.",
+"Би олны анхаарлын төвд байхаас санаа зовдоггүй.", "Би бусдын сэтгэл хөдлөлийг мэдэрдэг.",
+"Би аливаа хуваарийг дагаж мөрддөг.", "Би амархан уурладаг.",
+"Би аливаа зүйлийг тунгаан бодоход цаг зарцуулдаг.", "Би танихгүй хүмүүсийн дэргэд чимээгүй байдаг.",
+"Би хүмүүсийг тайвшруулдаг.", "Би ажилдаа шаардлага тавьдаг.",
+"Би ихэнх тохиолдолд сэтгэлээр унадаг.", "Би шинэ санаагаар дүүрэн."
+];
+
+const container = document.getElementById("questions");
+questions.forEach((q, i) => {
+    const div = document.createElement("div");
+    div.className = "question";
+    div.innerHTML = `
+        <p><b>${i + 1}.</b> ${q}</p>
+        <div class="answers">
+            <input type="number" name="q${i + 1}" min="1" max="5" required placeholder="1–5">
+        </div>`;
+    container.appendChild(div);
 });
 
-        document.getElementById("testForm").addEventListener("submit", function (event) {
-            event.preventDefault();
-            const formData = new FormData(event.target);
+document.getElementById("testForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    const s = {};
+    data.forEach((v, k) => s[k] = parseInt(v));
 
-            const scores = {};
-            formData.forEach((value, key) => {
-                scores[key] = parseInt(value);
-            });
-            const O = 8 + scores.q5 - scores.q10 + scores.q15 - scores.q20 + scores.q25 - scores.q30 + scores.q35 + scores.q40 + scores.q45 + scores.q50;
-            const C = 14 + scores.q3 - scores.q8 + scores.q13 - scores.q18 + scores.q23 - scores.q28 + scores.q33 - scores.q38 + scores.q43 + scores.q48;
-            const E = 20 + scores.q1 - scores.q6 + scores.q11 - scores.q16 + scores.q21 - scores.q26 + scores.q31 - scores.q36 + scores.q41 - scores.q46;
-            const A = 14 - scores.q2 + scores.q7 - scores.q12 + scores.q17 - scores.q22 + scores.q27 - scores.q32 + scores.q37 + scores.q42 + scores.q47;
-            const N = 38 - scores.q4 + scores.q9 - scores.q14 + scores.q19 - scores.q24 - scores.q29 - scores.q34 - scores.q39 - scores.q44 - scores.q49;
-        
+    const O = 8 + s.q5 - s.q10 + s.q15 - s.q20 + s.q25 - s.q30 + s.q35 + s.q40 + s.q45 + s.q50;
+    const C = 14 + s.q3 - s.q8 + s.q13 - s.q18 + s.q23 - s.q28 + s.q33 - s.q38 + s.q43 + s.q48;
+    const E = 20 + s.q1 - s.q6 + s.q11 - s.q16 + s.q21 - s.q26 + s.q31 - s.q36 + s.q41 - s.q46;
+    const A = 14 - s.q2 + s.q7 - s.q12 + s.q17 - s.q22 + s.q27 - s.q32 + s.q37 + s.q42 + s.q47;
+    const N = 38 - s.q4 + s.q9 - s.q14 + s.q19 - s.q24 - s.q29 - s.q34 - s.q39 - s.q44 - s.q49;
 
-            const descriptions = {
-                O: `• Openness to Experience (O) – <b>Нээлттэй хэв шинж</b> 
-                Шинэ туршлага, оюуны эрэл хайгуул хийдэг төрлийн зан чанар юм. Өндөр оноо авсан хүмүүс нь илүү мөрөөдөмтгийг илэрхийлнэ. Бага оноо авсан хүмүүс илүү бодитоор сэтгэх хандлагатай байдаг.`,
-                C: `• Conscientiousness (C) – <b>Хариуцлагатай зарчимч хэв шинж</b>
-                Шударга, ажилсаг хүний ​​зан чанар юм. Өндөр оноо авсан хүмүүс дүрэм журмыг дагаж мөрдөж, зохион байгуулалтыг илүүд үздэг. Бага оноо авсан хүмүүс заримдаа замбараагүй байж, бусдад худал хэлж болзошгүй.`,
-                E: `• Extroversion (E) - <b>Гадагшаа чиглэсэн, идэвхтэй хэв шинж</b>
-                Өөрөөсөө гадна буюу хамт олны дунд байхаас сэтгэл ханамжийг эрэлхийлдэг төрлийн зан чанар юм. Өндөр оноо авсан хүмүүс нийтэч байх хандлагатай байдаг бол бага оноо авсан хүмүүс ганцаараа ажиллахыг илүүд үздэг.`,
-                A: `• Agreeableness (A) – <b>Хүлцэнгүй хэв шинж</b>
-                Өөрсдийн зан төлөвийг бусдад нийцүүлэн өөрчлөхийг илэрхийлнэ. Өндөр оноо авсан хүмүүс ихэвчлэн эелдэг хүмүүс байдаг. Бага оноо авсан хүмүүс аливааг "байгаагаар нь хэлэх" хандлагатай байдаг.`,
-                N: `• Neuroticism (N) – <b>Тогтворгүй хэв шинж</b>
-                Сэтгэл хөдлөлийн шинж чанартай холбоотой байдлыг илэрхийлнэ.`,
-                 };
+    const desc = {
+        O: "Нээлттэй байдал (Openness): Шинэ санаа, бүтээлч байдал, уран сэтгэмжийн илрэл.",
+        C: "Хариуцлага (Conscientiousness): Зохион байгуулалт, хариуцлага, төлөвлөгөөтэй байдал.",
+        E: "Гадагш чиглэсэн байдал (Extraversion): Нийгмийн идэвх, нийтэч зан.",
+        A: "Хүлцэнгүй байдал (Agreeableness): Найрсаг, бусдад тусархаг, эвсэг байдал.",
+        N: "Сэтгэл тогтворгүй байдал (Neuroticism): Сэтгэл хөдлөл, эмзэг, тогтворгүй зан чанар."
+    };
 
-            const resultWindow = window.open("", "_blank");
-        resultWindow.document.write(`
-            <h1>Test Results</h1>
-             <p><strong>Openness to Experience (O):</strong> ${O}</p>
-            <p>${descriptions.O}</p>
-            <p><strong>Conscientiousness (C):</strong> ${C}</p>
-            <p>${descriptions.C}</p>
-            <p><strong>Extroversion (E):</strong> ${E}</p>
-            <p>${descriptions.E}</p>
-            <p><strong>Agreeableness (A):</strong> ${A}</p>
-            <p>${descriptions.A}</p>
-            <p><strong>Neuroticism (N):</strong> ${N}</p>
-            <p>${descriptions.N}</p>
-        `);
-        });
-    </script>
+    const resultDiv = document.getElementById("result");
+    resultDiv.style.display = "block";
+    resultDiv.innerHTML = `
+        <h2>Таны тестийн үр дүн</h2>
+        <p><b>O:</b> ${O} — ${desc.O}</p>
+        <p><b>C:</b> ${C} — ${desc.C}</p>
+        <p><b>E:</b> ${E} — ${desc.E}</p>
+        <p><b>A:</b> ${A} — ${desc.A}</p>
+        <p><b>N:</b> ${N} — ${desc.N}</p>
+    `;
+});
+</script>
 </body>
 </html>
